@@ -3,9 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
+	"sort"
 )
 
 func main() {
@@ -15,7 +18,10 @@ func main() {
 	//task4()
 	//task5()
 	//task6()
+	//task7()
 	//task8()
+	//task9()
+	//task10()
 
 }
 
@@ -43,16 +49,15 @@ func task1() {
 
 	res := CharFrequency(str)
 
-	first := true
+	isCommaNeeded := false
 	for key, val := range res {
-		if !first {
+		if isCommaNeeded {
 			fmt.Print(", ")
 		}
 
 		fmt.Printf("'%c': %d", key, val)
-		first = false
+		isCommaNeeded = true
 	}
-
 }
 
 /*
@@ -63,19 +68,29 @@ func task1() {
 
 */
 
-func UniqueElements(nums []int) []int {
-	arr := []int{}
-	m := make(map[int]bool)
+func getUniqueNums(nums []int) []int {
+	res := []int{}
+	uniqueNums := make(map[int]struct{})
 
 	for _, val := range nums {
-		if _, ok := m[val]; !ok {
-			arr = append(arr, val)
+		if _, ok := uniqueNums[val]; !ok {
+			res = append(res, val)
 		}
 
-		m[val] = true
+		uniqueNums[val] = struct{}{}
 	}
 
-	return arr
+	// m := make(map[int]bool)
+
+	// for _, val := range nums {
+	// 	if _, ok := m[val]; !ok {
+	// 		res = append(res, val)
+	// 	}
+
+	// 	m[val] = true
+	// }
+
+	return res
 
 }
 
@@ -92,16 +107,17 @@ func task2() {
 
 		for j := range str {
 			temp, err := strconv.Atoi(string(str[j]))
-
-			if err == nil {
-				sliceInt = append(sliceInt, temp)
+			if err != nil {
+				log.Fatal(err)
 			}
+
+			sliceInt = append(sliceInt, temp)
 
 		}
 
 	}
 
-	res := UniqueElements(sliceInt)
+	res := getUniqueNums(sliceInt)
 	for i := range res {
 		fmt.Print(res[i])
 
@@ -109,6 +125,26 @@ func task2() {
 			fmt.Print(", ")
 		}
 	}
+}
+
+func task2_V2() {
+	var n int
+	_, err := fmt.Scan(&n)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	reader := bufio.NewReader(os.Stdin)
+	numbers := make([]int, n)
+
+	for i := range n {
+		_, err := fmt.Fscan(reader, &numbers[i])
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	fmt.Println(numbers)
 
 }
 
@@ -207,18 +243,17 @@ func WordCount(text string) map[string]int {
 	m := make(map[string]int)
 
 	slice := strings.Split(text, " ")
+	var re = regexp.MustCompile(`[[:punct:]]`)
+
 	for i := range slice {
 		tempStr := strings.ToLower(slice[i])
+		tempStr = re.ReplaceAllString(tempStr, "")
 
 		slice[i] = tempStr
 	}
 
-	fmt.Println(slice)
-
 	for _, val := range slice {
-		if _, ok := m[val]; ok {
-			m[val]++
-		}
+		m[val]++
 	}
 
 	return m
@@ -268,6 +303,33 @@ func task6() {
 
 /*
 
+Обратный словарь с приоритетом (Средний–Сложный) Построй мапу map[int][]string по исходной map[string]int, группируя задачи по приоритету. 
+Внутри каждой группы отсортируй задачи по алфавиту. Функция: 
+func GroupTasksByPriority(tasks map[string]int) map[int][]string Вход: map[string]int{"TaskA": 2, "TaskB": 1, "TaskC": 2} 
+Выход: map[int][]string{1: {"TaskB"}, 2: {"TaskA", "TaskC"}}
+
+*/
+
+func GroupTasksByPriority(tasks map[string]int) map[int][]string {
+	m := make(map[int][]string)
+	for key, val := range tasks {
+		m[val] = append(m[val], key)
+		sort.Strings(m[val])
+	}
+
+	return m
+}
+
+func task7() {
+	m := map[string]int{"TaskA": 2, "TaskB": 1, "TaskC": 2}
+
+	res := GroupTasksByPriority(m)
+	fmt.Println(res)
+
+}
+
+/*
+
 Пересечение двух мап (Сложный) Верни мапу с ключами, которые есть в обеих, и значениями — суммой значений из обеих мап.
 Функция: func IntersectMaps(a, b map[string]int) map[string]int Вход:
 a := map[string]int{"apple": 2, "banana": 3}
@@ -305,5 +367,83 @@ func task8() {
 	b := map[string]int{"banana": 1, "apple": 1, "cherry": 5}
 
 	res := IntersectMaps(a, b)
+	fmt.Println(res)
+}
+
+/*
+
+Рейтинг фильмов (Сложный) Рассчитай среднюю оценку каждого фильма на основе мапы оценок. 
+Функция: func AverageRatings(ratings map[string][]int) map[string]float64 Вход: map[string][]int{"Inception": 
+{5, 4, 5}, "Avatar": {4, 3}} Выход: map[string]float64{"Inception": 4.67, "Avatar": 3.5}
+
+*/
+
+func AverageRatings(ratings map[string][]int) map[string]float64 {
+	m := make(map[string]float64)
+
+	for key, slice := range ratings {
+		var sum, count float64
+
+		for i := range slice {
+			sum += float64(slice[i])
+			count++
+		}
+
+		m[key] = sum / count
+	}
+
+	return m
+}
+
+func task9() {
+	m := map[string][]int{"Inception": {5, 4, 5}, "Avatar": {4, 3}}
+
+	first := false
+	res := AverageRatings(m)
+	for key, val := range res {
+		if first {
+			fmt.Print(", ")
+        }
+        
+		fmt.Printf("%q: %.2f",key,val)
+        first = true
+	}
+
+}
+
+/*
+
+Самое частое слово (Сложный) Верни слово, которое чаще всего встречается в строке. 
+Игнорируй регистр. В случае равенства — верни любое из них. Функция: func MostFrequentWord(text string) string 
+Вход: "The sun is the sun and the moon is the moon" Выход: "the"
+
+*/
+
+func MostFrequentWord(text string) string {
+	slice := strings.Split(text," ")
+
+	m := make(map[string]int)
+	for _, val := range slice {
+		m[val]++
+	}
+
+	resStr := ""
+	maxVal := 0
+	for key, val := range m {
+		if val > maxVal {
+			maxVal = val
+			resStr = key
+		}
+	}
+
+	return resStr
+}
+
+func task10() {
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	input := scanner.Text()
+
+	res := MostFrequentWord(input)
 	fmt.Println(res)
 }
