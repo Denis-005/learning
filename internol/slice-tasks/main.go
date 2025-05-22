@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -27,6 +28,8 @@ import (
 */
 
 func conversionStr(str []string) []int {
+	secondTask()
+
 	slice := []int{}
 	for i := range str {
 		num, _ := strconv.Atoi(str[i])
@@ -85,47 +88,35 @@ func main() {
 Все уникальные числа, разделённые пробелами в порядке возрастания.
 */
 
-/*
-import (
-	"bufio"
-	"fmt"
-	"os"
-	"strconv"
-	"strings"
-	"sort"
-)
+func secondTask() {
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	input := scanner.Text()
 
-func main() {
-    scanner := bufio.NewScanner(os.Stdin)
-    scanner.Scan()
-    input := scanner.Text()
+	tempSlice := strings.Split(input, " ")
 
-    tempSlice := strings.Split(input," ")
+	slice := []int{}
+	for i := range tempSlice {
+		num, _ := strconv.Atoi(tempSlice[i])
+		slice = append(slice, num)
+	}
 
-    slice := []int{}
-    for i := range tempSlice {
-        num,_ := strconv.Atoi(tempSlice[i])
-        slice = append(slice,num)
-    }
+	m := make(map[int]bool)
+	for _, v := range slice {
+		m[v] = true
+	}
 
-    m := make(map[int]bool)
-    for _,v := range slice {
-        m[v] = true
-    }
+	arr := []int{}
+	for i := range m {
+		arr = append(arr, i)
+	}
 
-    arr := []int{}
-    for i := range m {
-        arr = append(arr,i)
-    }
+	sort.Ints(arr)
 
-    sort.Ints(arr)
-
-    for i, v := range arr {
-        if i > 0 {
-            fmt.Print(" ")
-        }
-        fmt.Print(v)
-    }
+	for i, v := range arr {
+		if i > 0 {
+			fmt.Print(" ")
+		}
+		fmt.Print(v)
+	}
 }
-
-*/
