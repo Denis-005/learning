@@ -32,7 +32,7 @@ func main() {
 	for i := 0; i < len(slice); i++ {
 		if i != 0 {
 			fmt.Printf("%d. %s\n", i, slice[i])
-		}	
+		}
 	}
 
 	check := true
@@ -41,7 +41,7 @@ func main() {
 		if check {
 			fmt.Print("Введите сумму в USD: ")
 			fmt.Scan(&sum)
-		} 
+		}
 
 		if sum > 0 {
 			fmt.Println("Выберите номер валюты для конвертации из списка выше:")
