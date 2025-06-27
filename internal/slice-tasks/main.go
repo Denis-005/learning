@@ -27,8 +27,8 @@ import (
 
 */
 
-func conversionStr(str []string) []int {
-	secondTask()
+func conversionSlice(str []string) []int {
+	removingDuplicateNum()
 
 	slice := []int{}
 	for i := range str {
@@ -40,19 +40,19 @@ func conversionStr(str []string) []int {
 	return slice
 }
 
-func main() {
+func initializationArrays() {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	i := scanner.Text()
 
 	tempSliceStr1 := strings.Split(i, " ")
-	firstSliceInt := conversionStr(tempSliceStr1)
+	firstSliceInt := conversionSlice(tempSliceStr1)
 
 	scanner.Scan()
 	n := scanner.Text()
 
 	tempSliceStr2 := strings.Split(n, " ")
-	secondSliceInt := conversionStr(tempSliceStr2)
+	secondSliceInt := conversionSlice(tempSliceStr2)
 
 	m := make(map[int]bool)
 	for _, v := range firstSliceInt {
@@ -71,6 +71,11 @@ func main() {
 	}
 }
 
+func main() {
+	initializationArrays()
+	removingDuplicateNum()
+}
+
 /*
 
 Удаление дубликатов чисел
@@ -86,9 +91,10 @@ func main() {
 
 Формат выходных данных:
 Все уникальные числа, разделённые пробелами в порядке возрастания.
+
 */
 
-func secondTask() {
+func removingDuplicateNum() {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	input := scanner.Text()
