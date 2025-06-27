@@ -1,4 +1,4 @@
-package tasks
+package main
 
 import (
 	"bufio"
@@ -43,6 +43,8 @@ func main() {
 		Delete = "delete"
 	)
 
+	scanner := bufio.NewScanner(os.Stdin)
+
 	fmt.Println("Welcome to the TO DO List CLI app!")
 	fmt.Println()
 
@@ -57,7 +59,6 @@ func main() {
 		case Create:
 			fmt.Println("Enter task name:")
 
-			scanner := bufio.NewScanner(os.Stdin)
 			scanner.Scan()
 			input := scanner.Text()
 
@@ -71,7 +72,6 @@ func main() {
 		case Update:
 			fmt.Println("Enter task name to update: ")
 
-			scanner := bufio.NewScanner(os.Stdin)
 			scanner.Scan()
 			currentInput := scanner.Text()
 
@@ -81,7 +81,6 @@ func main() {
 					matched = true
 					fmt.Println("Enter new task name:")
 
-					scanner := bufio.NewScanner(os.Stdin)
 					scanner.Scan()
 					newInput := scanner.Text()
 
@@ -103,7 +102,6 @@ func main() {
 		case Delete:
 			fmt.Println("Enter task name to remove: ")
 
-			scanner := bufio.NewScanner(os.Stdin)
 			scanner.Scan()
 			deleteInput := scanner.Text()
 
