@@ -6,9 +6,9 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
-	"sort"
 )
 
 func main() {
@@ -22,7 +22,6 @@ func main() {
 	//task8()
 	//task9()
 	//task10()
-
 }
 
 /*
@@ -207,9 +206,15 @@ func AreAnagrams(a, b string) bool {
 	m1 := fillingMap(a)
 	m2 := fillingMap(b)
 
-	for key := range m1 {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for key, val := range m1 {
 		if _, ok := m2[key]; !ok {
-			return false
+			if val != m2[key] {
+				return false
+			}
 		}
 	}
 
@@ -222,11 +227,6 @@ func task4() {
 
 	str1 = strings.ToLower(strings.ReplaceAll(str1, " ", ""))
 	str2 = strings.ToLower(strings.ReplaceAll(str2, " ", ""))
-
-	if len(str1) != len(str2) {
-		fmt.Println("Разная длинна строк!")
-		return
-	}
 
 	res := AreAnagrams(str1, str2)
 	fmt.Println(res)
@@ -277,13 +277,13 @@ func task5() {
 */
 
 func HasDuplicates(words []string) bool {
-	m := make(map[string]bool)
+	seenWords := make(map[string]struct{})
 	for _, val := range words {
-		if _, ok := m[val]; ok {
+		if _, ok := seenWords[val]; ok {
 			return true
 		}
 
-		m[val] = true
+		seenWords[val] = struct{}{}
 	}
 
 	return false
@@ -303,9 +303,9 @@ func task6() {
 
 /*
 
-Обратный словарь с приоритетом (Средний–Сложный) Построй мапу map[int][]string по исходной map[string]int, группируя задачи по приоритету. 
-Внутри каждой группы отсортируй задачи по алфавиту. Функция: 
-func GroupTasksByPriority(tasks map[string]int) map[int][]string Вход: map[string]int{"TaskA": 2, "TaskB": 1, "TaskC": 2} 
+Обратный словарь с приоритетом (Средний–Сложный) Построй мапу map[int][]string по исходной map[string]int, группируя задачи по приоритету.
+Внутри каждой группы отсортируй задачи по алфавиту. Функция:
+func GroupTasksByPriority(tasks map[string]int) map[int][]string Вход: map[string]int{"TaskA": 2, "TaskB": 1, "TaskC": 2}
 Выход: map[int][]string{1: {"TaskB"}, 2: {"TaskA", "TaskC"}}
 
 */
@@ -372,8 +372,8 @@ func task8() {
 
 /*
 
-Рейтинг фильмов (Сложный) Рассчитай среднюю оценку каждого фильма на основе мапы оценок. 
-Функция: func AverageRatings(ratings map[string][]int) map[string]float64 Вход: map[string][]int{"Inception": 
+Рейтинг фильмов (Сложный) Рассчитай среднюю оценку каждого фильма на основе мапы оценок.
+Функция: func AverageRatings(ratings map[string][]int) map[string]float64 Вход: map[string][]int{"Inception":
 {5, 4, 5}, "Avatar": {4, 3}} Выход: map[string]float64{"Inception": 4.67, "Avatar": 3.5}
 
 */
@@ -382,14 +382,13 @@ func AverageRatings(ratings map[string][]int) map[string]float64 {
 	m := make(map[string]float64)
 
 	for key, slice := range ratings {
-		var sum, count float64
+		var sum float64
 
 		for i := range slice {
 			sum += float64(slice[i])
-			count++
 		}
 
-		m[key] = sum / count
+		m[key] = sum / float64(len(slice))
 	}
 
 	return m
@@ -398,41 +397,41 @@ func AverageRatings(ratings map[string][]int) map[string]float64 {
 func task9() {
 	m := map[string][]int{"Inception": {5, 4, 5}, "Avatar": {4, 3}}
 
-	first := false
+	isValueFirst := false
 	res := AverageRatings(m)
 	for key, val := range res {
-		if first {
+		if isValueFirst {
 			fmt.Print(", ")
-        }
-        
-		fmt.Printf("%q: %.2f",key,val)
-        first = true
+		}
+
+		fmt.Printf("%q: %.2f", key, val)
+		isValueFirst = true
 	}
 
 }
 
 /*
 
-Самое частое слово (Сложный) Верни слово, которое чаще всего встречается в строке. 
-Игнорируй регистр. В случае равенства — верни любое из них. Функция: func MostFrequentWord(text string) string 
+Самое частое слово (Сложный) Верни слово, которое чаще всего встречается в строке.
+Игнорируй регистр. В случае равенства — верни любое из них. Функция: func MostFrequentWord(text string) string
 Вход: "The sun is the sun and the moon is the moon" Выход: "the"
 
 */
 
 func MostFrequentWord(text string) string {
-	slice := strings.Split(text," ")
+	slice := strings.Split(text, " ")
 
+	 resStr := ""
+	 maxVal := 0
 	m := make(map[string]int)
 	for _, val := range slice {
 		m[val]++
-	}
 
-	resStr := ""
-	maxVal := 0
-	for key, val := range m {
-		if val > maxVal {
-			maxVal = val
-			resStr = key
+		for key, val := range m {
+			if val > maxVal {
+				resStr = key
+				maxVal = val
+			}
 		}
 	}
 
@@ -444,7 +443,6 @@ func task10() {
 	scanner.Scan()
 	input := scanner.Text()
 
-	res := MostFrequentWord(input)
+	res := MostFrequentWord(strings.ToLower(input))
 	fmt.Println(res)
 }
-
