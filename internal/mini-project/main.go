@@ -48,14 +48,14 @@ func main() {
 			var index int
 			fmt.Scan(&index)
 
-			isTrue := false
+			isCurrencyFound := false
 			for i := range slice {
 				if i == index {
-					isTrue = true
+					isCurrencyFound = true
 				}
 			}
 
-			if isTrue {
+			if isCurrencyFound {
 				num := 0.0
 				var currency string
 				for i, val := range slice {
