@@ -16,6 +16,7 @@ func main() {
 	initializingStructBook()
 	initializingStructRectangle()
 	Factorial(0)
+	
 }
 
 /*
