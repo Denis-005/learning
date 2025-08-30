@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func main() {
+func initializationMap() map[string]float64 {
 	m := map[string]float64{
 		"USD": 1.0,    // Доллар США
 		"EUR": 0.88,   // Евро
@@ -21,8 +21,14 @@ func main() {
 		"NOK": 10.11,  // Норвежская крона
 	}
 
+	return m
+}
+
+func main() {
+	newMap := initializationMap()
 	slice := []string{" "}
-	for key := range m {
+
+	for key := range newMap {
 		slice = append(slice, key)
 	}
 
@@ -36,8 +42,9 @@ func main() {
 	}
 
 	check := true
-	var sum float64
 	for {
+		var sum float64
+
 		if check {
 			fmt.Print("Введите сумму в USD: ")
 			fmt.Scan(&sum)
@@ -60,7 +67,7 @@ func main() {
 				var currency string
 				for i, val := range slice {
 					if i == index {
-						num = sum * m[val]
+						num = sum * newMap[val]
 						currency = val
 					}
 				}
@@ -68,10 +75,11 @@ func main() {
 				fmt.Printf("%.2f %s = %.2f %s", sum, currency, num, currency)
 				break
 
-			} else {
-				fmt.Println("Неправильный выбор валюты!")
-				check = false
-			}
+			} 
+
+			fmt.Println("Неправильный выбор валюты!")
+			continue
+			
 
 		} else {
 			fmt.Println("Сумма должна превышать 0!")
