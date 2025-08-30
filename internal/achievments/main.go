@@ -60,6 +60,7 @@ func main() {
 	for _, val := range players {
 		fmt.Printf("%s - %s [%d]\n",val.Name,val.Level,val.Score)
 	}
+	
 }
 
 
