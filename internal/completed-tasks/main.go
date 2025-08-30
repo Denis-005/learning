@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	// task1()
+	//task1()
 	//task2()
 	//task3()
 	task4()
@@ -206,15 +206,9 @@ func AreAnagrams(a, b string) bool {
 	m1 := fillingMap(a)
 	m2 := fillingMap(b)
 
-	if len(a) != len(b) {
-		return false
-	}
-
 	for key, val := range m1 {
-		if _, ok := m2[key]; !ok {
-			if val != m2[key] {
-				return false
-			}
+		if val != m2[key] {
+			return false
 		}
 	}
 
@@ -228,8 +222,13 @@ func task4() {
 	str1 = strings.ToLower(strings.ReplaceAll(str1, " ", ""))
 	str2 = strings.ToLower(strings.ReplaceAll(str2, " ", ""))
 
-	res := AreAnagrams(str1, str2)
-	fmt.Println(res)
+	if len(str1) == len(str2) {
+		res := AreAnagrams(str1, str2)
+		fmt.Println(res)
+	} else {
+		fmt.Println("false")
+	}
+
 }
 
 /*
@@ -421,8 +420,8 @@ func task9() {
 func MostFrequentWord(text string) string {
 	slice := strings.Split(text, " ")
 
-	 resStr := ""
-	 maxVal := 0
+	resStr := ""
+	maxVal := 0
 	m := make(map[string]int)
 	for _, val := range slice {
 		m[val]++
