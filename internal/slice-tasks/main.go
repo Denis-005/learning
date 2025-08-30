@@ -9,6 +9,11 @@ import (
 	"strings"
 )
 
+func main() {
+	initializationArrays()
+	removingDuplicateNum()
+}
+
 /*
 
 Поиск пересечения массивов
@@ -17,8 +22,6 @@ import (
 */
 
 func conversionSlice(str []string) []int {
-	removingDuplicateNum()
-
 	slice := []int{}
 	for i := range str {
 		num, _ := strconv.Atoi(str[i])
@@ -60,11 +63,6 @@ func initializationArrays() {
 	}
 }
 
-func main() {
-	initializationArrays()
-	removingDuplicateNum()
-}
-
 /*
 
 Удаление дубликатов чисел
@@ -85,19 +83,19 @@ func removingDuplicateNum() {
 		slice = append(slice, num)
 	}
 
-	m := make(map[int]bool)
+	m := make(map[int]struct{})
 	for _, v := range slice {
-		m[v] = true
+		m[v] = struct{}{}
 	}
 
-	arr := []int{}
+	newSlice := []int{}
 	for i := range m {
-		arr = append(arr, i)
+		newSlice = append(newSlice, i)
 	}
 
-	sort.Ints(arr)
+	sort.Ints(newSlice)
 
-	for i, v := range arr {
+	for i, v := range newSlice {
 		if i > 0 {
 			fmt.Print(" ")
 		}
