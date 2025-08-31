@@ -24,12 +24,25 @@ func initializationMap() map[string]float64 {
 	return m
 }
 
+type Currencie struct {
+	NameCurrencie  string
+	ValueCurrencie float64
+}
+
 func main() {
-	newMap := initializationMap()
+	mapWithCurrencies := initializationMap()
 	slice := []string{" "}
 
-	for key := range newMap {
-		slice = append(slice, key)
+	count := 1
+	currencie := make(map[int]Currencie)
+	for name, val := range mapWithCurrencies {
+		slice = append(slice, name)
+		currencie[count] = Currencie{
+			NameCurrencie:  name,
+			ValueCurrencie: val,
+		}
+
+		count++
 	}
 
 	fmt.Println("Добро пожадлвать в конвертер валют!")
@@ -52,12 +65,12 @@ func main() {
 
 		if sum > 0 {
 			fmt.Println("Выберите номер валюты для конвертации из списка выше:")
-			var index int
-			fmt.Scan(&index)
+			var numCurrencie int
+			fmt.Scan(&numCurrencie)
 
 			isCurrencyFound := false
-			for i := range slice {
-				if i == index {
+			for key := range currencie {
+				if key == numCurrencie {
 					isCurrencyFound = true
 				}
 			}
@@ -65,25 +78,24 @@ func main() {
 			if isCurrencyFound {
 				num := 0.0
 				var currency string
-				for i, val := range slice {
-					if i == index {
-						num = sum * newMap[val]
-						currency = val
+				for key, val := range currencie {
+					if key == numCurrencie {
+						num = sum * val.ValueCurrencie
+						currency = val.NameCurrencie
 					}
 				}
 
 				fmt.Printf("%.2f %s = %.2f %s", sum, currency, num, currency)
 				break
 
-			} 
+			}
 
 			fmt.Println("Неправильный выбор валюты!")
 			continue
-			
 
-		} else {
-			fmt.Println("Сумма должна превышать 0!")
-			continue
 		}
+
+		fmt.Println("Сумма должна превышать 0!")
+		continue
 	}
 }
