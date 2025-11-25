@@ -9,7 +9,6 @@ func main2() {
 		// Это условие того что число простое так как не делиться нацело.
 		if num%2 != 0 {
 			count++
-			fmt.Println(count)
 		}
 	}
 
@@ -19,14 +18,13 @@ func main2() {
 	if count == deliteli {
 		fmt.Println("Простое")
 	} else {
-		fmt.Println("Не ростое")
+		fmt.Println("Составное")
 	}
 }
 
-func main3() {
-	var num int
-    fmt.Scan(&num)
-    
+func main() {
+	num := 13
+
 	isPrime := true
 	for i := 2; i < num; i++ {
 		// Это условие того что число составное так как поделилось нацело.
