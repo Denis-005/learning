@@ -2,8 +2,10 @@ package main
 
 import "fmt"
 
-func initializationMap() map[string]float64 {
-	m := map[string]float64{
+var currencyPrices map[string]float64
+
+func init() {
+	currencyPrices = map[string]float64{
 		"USD": 1.0,    // Доллар США
 		"EUR": 0.88,   // Евро
 		"RUB": 79.08,  // Российский рубль
@@ -20,79 +22,64 @@ func initializationMap() map[string]float64 {
 		"SEK": 9.53,   // Шведская крона
 		"NOK": 10.11,  // Норвежская крона
 	}
-
-	return m
 }
 
-type Currencie struct {
-	NameCurrencie  string
-	ValueCurrencie float64
+type List struct {
+	Name   string
+	Number int
 }
 
-func main() {
-	mapWithCurrencies := initializationMap()
-	slice := []string{" "}
+func initSlice() ([16]List, map[int]string) {
+	l := [16]List{}
+	itemsByKey := map[int]string{}
 
 	count := 1
-	currencie := make(map[int]Currencie)
-	for name, val := range mapWithCurrencies {
-		slice = append(slice, name)
-		currencie[count] = Currencie{
-			NameCurrencie:  name,
-			ValueCurrencie: val,
+	for name, _ := range currencyPrices {
+		if count > len(l)-1 {
+			break
 		}
 
+		itemsByKey[count] = name
+		l[count] = List{name, count}
 		count++
 	}
 
-	fmt.Println("Добро пожадлвать в конвертер валют!")
+	return l, itemsByKey
+}
+
+func main() {
+	fmt.Println("Добро пожаловать в конвертер валют!")
 	fmt.Println("Доступные валюты для конвертации:")
 
-	for i := 0; i < len(slice); i++ {
+	list, listMap := initSlice()
+	for i, val := range list {
 		if i != 0 {
-			fmt.Printf("%d. %s\n", i, slice[i])
+			fmt.Printf("%d. %s\n", val.Number, val.Name)
 		}
 	}
 
 	check := true
 	for {
 		var sum float64
-
 		if check {
 			fmt.Print("Введите сумму в USD: ")
-			fmt.Scan(&sum)
+			fmt.Scanln(&sum)
 		}
 
 		if sum > 0 {
 			fmt.Println("Выберите номер валюты для конвертации из списка выше:")
-			var numCurrencie int
-			fmt.Scan(&numCurrencie)
+			var numCurrency int
+			fmt.Scan(&numCurrency)
 
-			isCurrencyFound := false
-			for key := range currencie {
-				if key == numCurrencie {
-					isCurrencyFound = true
-				}
+			currencyName, ok := listMap[numCurrency]
+			if !ok {
+				fmt.Println("Неправильный выбор валюты!")
+				continue
 			}
 
-			if isCurrencyFound {
-				num := 0.0
-				var currency string
-				for key, val := range currencie {
-					if key == numCurrencie {
-						num = sum * val.ValueCurrencie
-						currency = val.NameCurrencie
-					}
-				}
-
-				fmt.Printf("%.2f %s = %.2f %s", sum, currency, num, currency)
-				break
-
-			}
-
-			fmt.Println("Неправильный выбор валюты!")
-			continue
-
+			price := (currencyPrices[currencyName]) * sum
+			fmt.Printf("%.2f %s = %.2f %s", sum, currencyName, price, currencyName)
+			break
 		}
 
 		fmt.Println("Сумма должна превышать 0!")
