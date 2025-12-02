@@ -2,41 +2,40 @@
 
 //Дана строка s, найдите длину самой длинной подстроки без повторяющихся символов.
 
-package main
-
-import "fmt"
-
-func main() {
-	s := "abcabcbb"
-	runes := []rune(s)
-	seen := make(map[rune]int)
-	maxLen := 0
-	start := 0
-
-	for i, r := range runes {
-		if pos, ok := seen[r]; ok && pos >= start {
-			start = pos + 1 // сдвигаем начало окна
-		}
-		seen[r] = i
-		if i-start+1 > maxLen {
-			maxLen = i - start + 1
-		}
-	}
-
-	fmt.Println(maxLen)
-}
+//package main
+//
+//import "fmt"
+//
+//func main() {
+//	s := "abcabcbb"
+//	runes := []rune(s)
+//	seen := make(map[rune]int)
+//	maxLen := 0
+//	start := 0
+//
+//	for i, r := range runes {
+//		if pos, ok := seen[r]; ok && pos >= start {
+//			start = pos + 1 // сдвигаем начало окна
+//		}
+//		seen[r] = i
+//		if i-start+1 > maxLen {
+//			maxLen = i - start + 1
+//		}
+//	}
+//
+//	fmt.Println(maxLen)
+//}
 
 // Моя версия.
 
-/*
 package main
 
 import (
-"fmt"
+	"fmt"
 )
 
 func main() {
-	word := "qiweabtcabcbbawec"
+	word := "abcbdef"
 	symbols := []rune(word)
 
 	maxLen, count := 0, 1
@@ -63,5 +62,3 @@ func main() {
 
 	fmt.Println(maxLen)
 }
-
-*/
